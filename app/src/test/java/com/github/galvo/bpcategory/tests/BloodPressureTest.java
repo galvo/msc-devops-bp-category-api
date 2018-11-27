@@ -69,8 +69,8 @@ public class BloodPressureTest {
     }
 
     @ParameterizedTest
-    @MethodSource("invalidSystolicAndDiastolicRange")
-    @DisplayName("Test IllegalArgumentException thrown for Invalid Systolic & Diastolic Values")
+    @MethodSource("invalidOutOfRangeCategoryRanges")
+    @DisplayName("Test IllegalArgumentException thrown for Out of Range systolic and diastolic values")
     public void testOutOfRangeIllegalArgumentException(int[] systolicValues, int[] diastolicValues) {
         // given
         BloodPressure bloodPressure = new BloodPressure();
@@ -177,31 +177,59 @@ public class BloodPressureTest {
         );
     }
 
+    static Stream<Arguments> invalidOutOfRangeCategoryRanges() {
+        return Stream.of(Arguments.of(getLowSystolicRange(), getIdealDiastolicRange()));
+    }
+
     static Stream<Arguments> validLowBloodPressureCategoryRanges() {
-        return Stream.of(
-                Arguments.of(IntStream.range(BloodPressure.SYSTOLIC_MIN, 89).toArray(),
-                        IntStream.range(BloodPressure.DIASTOLIC_MIN, 59).toArray())
-        );
+        return Stream.of(Arguments.of(getLowSystolicRange(), getLowDiastolicRange()));
     }
 
     static Stream<Arguments> validIdealBloodPressureCategoryRanges() {
-        return Stream.of(
-                Arguments.of(IntStream.range(90, 119).toArray(),
-                        IntStream.range(60, 79).toArray())
-        );
+        return Stream.of(Arguments.of(getIdealSystolicRange(), getIdealDiastolicRange()));
     }
 
     static Stream<Arguments> validPreHighBloodPressureCategoryRanges() {
-        return Stream.of(
-                Arguments.of(IntStream.range(120, 139).toArray(),
-                        IntStream.range(80, 89).toArray())
-        );
+        return Stream.of(Arguments.of(getPreHighSystolicRange(), getPreHighDiastolicRange()));
     }
 
     static Stream<Arguments> validHighBloodPressureCategoryRanges() {
-        return Stream.of(
-                Arguments.of(IntStream.range(140, 190).toArray(),
-                        IntStream.range(90, 100).toArray())
-        );
+        return Stream.of(Arguments.of(getHighSystolicRange(), getHighDiastolicRange()));
+    }
+
+    private static int[] getLowSystolicRange() {
+        return getIntArray(BloodPressure.SYSTOLIC_MIN, 89);
+    }
+
+    private static int[] getLowDiastolicRange() {
+        return getIntArray(BloodPressure.DIASTOLIC_MIN, 59);
+    }
+
+    private static int[] getIdealSystolicRange() {
+        return getIntArray(90, 119);
+    }
+
+    private static int[] getIdealDiastolicRange() {
+        return getIntArray(60, 79);
+    }
+
+    private static int[] getPreHighSystolicRange() {
+        return getIntArray(120, 139);
+    }
+
+    private static int[] getPreHighDiastolicRange() {
+        return getIntArray(80, 89);
+    }
+
+    private static int[] getHighSystolicRange() {
+        return getIntArray(140, 190);
+    }
+
+    private static int[] getHighDiastolicRange() {
+        return getIntArray(90, 100);
+    }
+
+    private static int[] getIntArray(int min, int max) {
+        return IntStream.range(min, max).toArray();
     }
 }
