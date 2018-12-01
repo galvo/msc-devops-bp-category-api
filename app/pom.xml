@@ -29,6 +29,7 @@
 
 		<docker.image.prefix>galvo.github.com</docker.image.prefix>
 		<docker.image.name>${project.artifactId}</docker.image.name>
+		<docker.image.version>${project.version}</docker.image.version>
 	</properties>
 
 	<dependencies>
@@ -118,7 +119,7 @@
 				<version>1.3.6</version>
 				<configuration>
 					<repository>${docker.image.prefix}/${docker.image.name}</repository>
-					<tag>${project.version}</tag>
+					<tag>${docker.image.version}</tag>
 					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
 					<force>true</force>
 					<buildArgs>
