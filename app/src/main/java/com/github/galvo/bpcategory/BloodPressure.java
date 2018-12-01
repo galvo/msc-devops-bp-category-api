@@ -11,6 +11,24 @@ public class BloodPressure {
     public static final int DIASTOLIC_MAX = 100;
 
     public BloodPressureCategory getBloodPressureCategory(int systolic, int diastolic) {
+        checkParamsAreValid(systolic, diastolic);
+
+        if (systolic < 90 && diastolic < 60) {
+            return BloodPressureCategory.LOW;
+        } else if ((systolic >= 90 && systolic < 120)
+                && (diastolic >= 60 && diastolic < 80)) {
+            return BloodPressureCategory.NORMAL;
+        } else if ((systolic >= 120 && systolic < 140)
+                && (diastolic >= 80 && diastolic < 90)) {
+            return BloodPressureCategory.PRE_HIGH;
+        } else if (systolic >= 140 && diastolic >= 90) {
+            return BloodPressureCategory.HIGH;
+        } else {
+            throw new IllegalArgumentException("Out of range");
+        }
+    }
+
+    private void checkParamsAreValid(int systolic, int diastolic) {
         boolean invalidSystolicValue = false;
         boolean invalidDiastolicValue = false;
         if (systolic < SYSTOLIC_MIN || systolic > SYSTOLIC_MAX) {
@@ -25,22 +43,6 @@ public class BloodPressure {
             throw new IllegalArgumentException("Invalid Systolic Value");
         } else if (invalidDiastolicValue) {
             throw new IllegalArgumentException("Invalid Diastolic Value");
-        }
-
-        if ((systolic >= SYSTOLIC_MIN && systolic < 90)
-                && (diastolic >= DIASTOLIC_MIN && diastolic < 60)) {
-            return BloodPressureCategory.LOW;
-        } else if ((systolic >= 90 && systolic < 120)
-                && (diastolic >= 60 && diastolic < 80)) {
-            return BloodPressureCategory.NORMAL;
-        } else if ((systolic >= 120 && systolic < 140)
-                && (diastolic >= 80 && diastolic < 90)) {
-            return BloodPressureCategory.PRE_HIGH;
-        } else if ((systolic >= 140 && systolic <= SYSTOLIC_MAX)
-                && (diastolic >= 90 && diastolic <= DIASTOLIC_MAX)) {
-            return BloodPressureCategory.HIGH;
-        } else {
-            throw new IllegalArgumentException("Out of range");
         }
     }
 }
