@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>calculator</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+</head>
+<body>
+
+<div class="container">
+    <h2>BP Category Calculator</h2>
+    <form action="#" th:action="@{/calculator}" th:object="${bloodPressureModel}" method="POST">
+        <div class="form-group row">
+            <label class="col-1 col-form-label">Systolic:</label>
+            <div class="col-3">
+                <input type="number" th:field="*{systolic}" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-1 col-form-label">Diastolic:</label>
+            <div class="col-3">
+                <input type="number" th:field="*{diastolic}" />
+            </div>
+        </div>
+        <p>
+            <input type="submit" class="button" name="submit" value="Submit"/>
+            <input type="submit" class="button" name="reset" value="Reset"/>
+        </p>
+        <h4><p th:text="${result}"/></h4>
+    </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+</div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 package com.github.galvo.bpcategory.tests;
 
-import com.github.galvo.bpcategory.BloodPressure;
+import com.github.galvo.bpcategory.BloodPressureCategoryCalculator;
 import com.github.galvo.bpcategory.BloodPressureCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,18 +13,18 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class BloodPressureTest {
+public class BloodPressureCategoryCalculatorTest {
 
     @ParameterizedTest
     @MethodSource("invalidSystolicRange")
     @DisplayName("Test IllegalArgumentException thrown for Invalid Systolic Range")
     public void testInvalidSystolicRange(int systolicValue) {
         // given
-        BloodPressure bloodPressure = new BloodPressure();
+        BloodPressureCategoryCalculator bloodPressure = new BloodPressureCategoryCalculator();
 
         // when
         Throwable thrown = catchThrowable(() -> {
-            bloodPressure.getBloodPressureCategory(systolicValue, BloodPressure.DIASTOLIC_MIN); });
+            bloodPressure.getCategory(systolicValue, BloodPressureCategoryCalculator.DIASTOLIC_MIN); });
 
         // then
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Invalid Systolic Value");
@@ -35,11 +35,11 @@ public class BloodPressureTest {
     @DisplayName("Test IllegalArgumentException thrown for Invalid Diastolic Range")
     public void testInvalidDiastolicRange(int diastolicValue) {
         // given
-        BloodPressure bloodPressure = new BloodPressure();
+        BloodPressureCategoryCalculator bloodPressure = new BloodPressureCategoryCalculator();
 
         // when
         Throwable thrown = catchThrowable(() -> {
-            bloodPressure.getBloodPressureCategory(BloodPressure.SYSTOLIC_MIN, diastolicValue); });
+            bloodPressure.getCategory(BloodPressureCategoryCalculator.SYSTOLIC_MIN, diastolicValue); });
 
         // then
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Invalid Diastolic Value");
@@ -50,7 +50,7 @@ public class BloodPressureTest {
     @DisplayName("Test IllegalArgumentException thrown for Invalid Systolic & Diastolic Values")
     public void testInvalidSystolicAndDiastolicRange(int[] systolicValues, int[] diastolicValues) {
         // given
-        BloodPressure bloodPressure = new BloodPressure();
+        BloodPressureCategoryCalculator bloodPressure = new BloodPressureCategoryCalculator();
         for (int i = 0; i < systolicValues.length; i++) {
             for (int j = 0; j < diastolicValues.length; j++) {
                 final int systolicValue = systolicValues[i];
@@ -58,7 +58,7 @@ public class BloodPressureTest {
 
                 // when
                 Throwable thrown = catchThrowable(() -> {
-                    bloodPressure.getBloodPressureCategory(systolicValue, diastolicValue);
+                    bloodPressure.getCategory(systolicValue, diastolicValue);
                 });
 
                 // then
@@ -73,7 +73,7 @@ public class BloodPressureTest {
     @DisplayName("Test IllegalArgumentException thrown for Out of Range systolic and diastolic values")
     public void testOutOfRangeIllegalArgumentException(int[] systolicValues, int[] diastolicValues) {
         // given
-        BloodPressure bloodPressure = new BloodPressure();
+        BloodPressureCategoryCalculator bloodPressure = new BloodPressureCategoryCalculator();
         for (int i = 0; i < systolicValues.length; i++) {
             for (int j = 0; j < diastolicValues.length; j++) {
                 final int systolicValue = systolicValues[i];
@@ -81,7 +81,7 @@ public class BloodPressureTest {
 
                 // when
                 Throwable thrown = catchThrowable(() -> {
-                    bloodPressure.getBloodPressureCategory(systolicValue, diastolicValue);
+                    bloodPressure.getCategory(systolicValue, diastolicValue);
                 });
 
                 // then
@@ -96,11 +96,11 @@ public class BloodPressureTest {
     @DisplayName("Test valid Low Blood Pressure Category ranges")
     public void testValidLowCategoryRanges(int[] systolicValues, int[] diastolicValues) {
         // given
-        BloodPressure bloodPressure = new BloodPressure();
+        BloodPressureCategoryCalculator bloodPressure = new BloodPressureCategoryCalculator();
         for (int i = 0; i < systolicValues.length; i++) {
             for (int j = 0; j < diastolicValues.length; j++) {
                 // when
-                BloodPressureCategory category = bloodPressure.getBloodPressureCategory(systolicValues[i], diastolicValues[j]);
+                BloodPressureCategory category = bloodPressure.getCategory(systolicValues[i], diastolicValues[j]);
 
                 // then
                 assertThat(category).isEqualTo(BloodPressureCategory.LOW);
@@ -113,11 +113,11 @@ public class BloodPressureTest {
     @DisplayName("Test valid Normal Blood Pressure Category ranges")
     public void testIdealBloodPressureCategoryRanges(int[] systolicValues, int[] diastolicValues) {
         // given
-        BloodPressure bloodPressure = new BloodPressure();
+        BloodPressureCategoryCalculator bloodPressure = new BloodPressureCategoryCalculator();
         for (int i = 0; i < systolicValues.length; i++) {
             for (int j = 0; j < diastolicValues.length; j++) {
                 // when
-                BloodPressureCategory category = bloodPressure.getBloodPressureCategory(systolicValues[i], diastolicValues[j]);
+                BloodPressureCategory category = bloodPressure.getCategory(systolicValues[i], diastolicValues[j]);
 
                 // then
                 assertThat(category).isEqualTo(BloodPressureCategory.NORMAL);
@@ -130,11 +130,11 @@ public class BloodPressureTest {
     @DisplayName("Test valid Pre High Blood Pressure Category ranges")
     public void testValidPreHighBloodPressureCategoryRanges(int[] systolicValues, int[] diastolicValues) {
         // given
-        BloodPressure bloodPressure = new BloodPressure();
+        BloodPressureCategoryCalculator bloodPressure = new BloodPressureCategoryCalculator();
         for (int i = 0; i < systolicValues.length; i++) {
             for (int j = 0; j < diastolicValues.length; j++) {
                 // when
-                BloodPressureCategory category = bloodPressure.getBloodPressureCategory(systolicValues[i], diastolicValues[j]);
+                BloodPressureCategory category = bloodPressure.getCategory(systolicValues[i], diastolicValues[j]);
 
                 // then
                 assertThat(category).isEqualTo(BloodPressureCategory.PRE_HIGH);
@@ -147,11 +147,11 @@ public class BloodPressureTest {
     @DisplayName("Test valid High Blood Pressure Category ranges")
     public void testValidHighBloodPressureCategoryRanges(int[] systolicValues, int[] diastolicValues) {
         // given
-        BloodPressure bloodPressure = new BloodPressure();
+        BloodPressureCategoryCalculator bloodPressure = new BloodPressureCategoryCalculator();
         for (int i = 0; i < systolicValues.length; i++) {
             for (int j = 0; j < diastolicValues.length; j++) {
                 // when
-                BloodPressureCategory category = bloodPressure.getBloodPressureCategory(systolicValues[i], diastolicValues[j]);
+                BloodPressureCategory category = bloodPressure.getCategory(systolicValues[i], diastolicValues[j]);
 
                 // then
                 assertThat(category).isEqualTo(BloodPressureCategory.HIGH);
@@ -161,14 +161,14 @@ public class BloodPressureTest {
 
     private static IntStream invalidSystolicRange() {
         return IntStream.concat(
-                IntStream.range(0, BloodPressure.SYSTOLIC_MIN - 1),
-                IntStream.range(BloodPressure.SYSTOLIC_MAX + 1, BloodPressure.SYSTOLIC_MAX + 10));
+                IntStream.range(0, BloodPressureCategoryCalculator.SYSTOLIC_MIN - 1),
+                IntStream.range(BloodPressureCategoryCalculator.SYSTOLIC_MAX + 1, BloodPressureCategoryCalculator.SYSTOLIC_MAX + 10));
     }
 
     private static IntStream invalidDiastolicRange() {
         return IntStream.concat(
-                IntStream.range(0, BloodPressure.DIASTOLIC_MIN - 1),
-                IntStream.range(BloodPressure.DIASTOLIC_MAX + 1, BloodPressure.DIASTOLIC_MAX + 10));
+                IntStream.range(0, BloodPressureCategoryCalculator.DIASTOLIC_MIN - 1),
+                IntStream.range(BloodPressureCategoryCalculator.DIASTOLIC_MAX + 1, BloodPressureCategoryCalculator.DIASTOLIC_MAX + 10));
     }
 
     static Stream<Arguments> invalidSystolicAndDiastolicRange() {
@@ -198,11 +198,11 @@ public class BloodPressureTest {
     }
 
     private static int[] getLowSystolicRange() {
-        return getIntArray(BloodPressure.SYSTOLIC_MIN, 89);
+        return getIntArray(BloodPressureCategoryCalculator.SYSTOLIC_MIN, 89);
     }
 
     private static int[] getLowDiastolicRange() {
-        return getIntArray(BloodPressure.DIASTOLIC_MIN, 59);
+        return getIntArray(BloodPressureCategoryCalculator.DIASTOLIC_MIN, 59);
     }
 
     private static int[] getIdealSystolicRange() {
