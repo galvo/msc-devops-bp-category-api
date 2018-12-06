@@ -30,6 +30,8 @@
 		<docker.image.prefix>galvo.github.com</docker.image.prefix>
 		<docker.image.name>${project.artifactId}</docker.image.name>
 		<docker.image.version>${project.version}</docker.image.version>
+		<argLine></argLine>
+
 	</properties>
 
 	<dependencies>
@@ -93,25 +95,30 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
-
+	<profiles>
+		<profile>
+			<id>all-tests</id>
+			<properties>
+				<build.profile.id>all-tests</build.profile.id>
+				<!-- All tests are run. -->
+				<skip.integration.tests>false</skip.integration.tests>
+				<skip.unit.tests>false</skip.unit.tests>
+			</properties>
+		</profile>
+	</profiles>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<!-- workaround for https://github.com/docker-library/openjdk/issues/247 -->
-					<argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+					<argLine>${surefireArgLine}</argLine>
 				</configuration>
 			</plugin>
 			<!-- Enable the failsafe plugin by default for *_IT tests -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<configuration>
-					<!-- workaround for https://github.com/docker-library/openjdk/issues/247 -->
-					<argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -152,6 +159,40 @@
 						<goals>
 							<goal>push</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>com.github.galvo.bpcategory.*</include>
+					</includes>
+					<append>true</append>
+				</configuration>
+				<executions>
+					<execution>
+						<id>prepare</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<propertyName>surefireArgLine</propertyName>
+							<destFile>${project.build.directory}/coverage-reports/jacoco-unit.exec</destFile>
+							<append>true</append>
+						</configuration>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${project.build.directory}/coverage-reports/jacoco-unit.exec</dataFile>
+							<outputDirectory>${project.build.directory}/jacoco-ut</outputDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
