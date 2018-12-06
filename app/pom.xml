@@ -95,25 +95,11 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>all-tests</id>
-			<properties>
-				<build.profile.id>all-tests</build.profile.id>
-				<!-- All tests are run. -->
-				<skip.integration.tests>false</skip.integration.tests>
-				<skip.unit.tests>false</skip.unit.tests>
-			</properties>
-		</profile>
-	</profiles>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>${surefireArgLine}</argLine>
-				</configuration>
 			</plugin>
 			<!-- Enable the failsafe plugin by default for *_IT tests -->
 			<plugin>
@@ -165,12 +151,6 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>com.github.galvo.bpcategory.*</include>
-					</includes>
-					<append>true</append>
-				</configuration>
 				<executions>
 					<execution>
 						<id>prepare</id>
