@@ -12,37 +12,41 @@ import org.springframework.web.bind.annotation.*;
 public class BloodPressureController {
 
     private BloodPressureCategoryCalculator bloodPressureCalculator;
+    private final String ATTRIBUTE_RESULT = "result";
+    private final String ATTRIBUTE_BLOOD_PRESSURE_MODEL = "bloodPressureModel";
+    private final String VIEW_CALCULATOR = "calculator";
+    private final String ENDPOINT_CALCULATOR = "/calculator";
 
     @Autowired
     public void setBloodPressureCategoryCalculator(BloodPressureCategoryCalculator bloodPressureCalculator) {
         this.bloodPressureCalculator = bloodPressureCalculator;
     }
 
-    @RequestMapping(value = "/calculator", method = RequestMethod.GET)
+    @GetMapping(value = ENDPOINT_CALCULATOR)
     public String getCalculatorPage(Model model){
-        model.addAttribute("bloodPressureModel", new BloodPressureModel());
-        model.addAttribute("result", "");
-        return "calculator";
+        model.addAttribute(ATTRIBUTE_BLOOD_PRESSURE_MODEL, new BloodPressureModel());
+        model.addAttribute(ATTRIBUTE_RESULT, "");
+        return VIEW_CALCULATOR;
     }
 
-    @RequestMapping(value="/calculator", params="submit", method = RequestMethod.POST)
-    public String getCategory(@ModelAttribute("bloodPressureModel") BloodPressureModel bloodPressureModel, Model model) {
+    @PostMapping(value = ENDPOINT_CALCULATOR, params="submit")
+    public String getCategory(@ModelAttribute(ATTRIBUTE_BLOOD_PRESSURE_MODEL) BloodPressureModel bloodPressureModel, Model model) {
         try {
             BloodPressureCategory category = bloodPressureCalculator.getCategory(
                     bloodPressureModel.getSystolic(), bloodPressureModel.getDiastolic());
-            model.addAttribute("result", category.name());
+            model.addAttribute(ATTRIBUTE_RESULT, category.name());
         } catch (Exception ex) {
-            model.addAttribute("result", ex.getMessage());
+            model.addAttribute(ATTRIBUTE_RESULT, ex.getMessage());
         }
-        return "calculator";
+        return VIEW_CALCULATOR;
     }
 
-    @RequestMapping(value="/calculator", params="reset", method = RequestMethod.POST)
-    public String clear(@ModelAttribute("bloodPressureModel") BloodPressureModel bloodPressureModel, Model model) {
+    @PostMapping(value = ENDPOINT_CALCULATOR, params="reset")
+    public String clear(@ModelAttribute(ATTRIBUTE_BLOOD_PRESSURE_MODEL) BloodPressureModel bloodPressureModel, Model model) {
         bloodPressureModel.setDiastolic(0);
         bloodPressureModel.setSystolic(0);
-        model.addAttribute("bloodPressureModel", bloodPressureModel);
-        model.addAttribute("result", "");
-        return "calculator";
+        model.addAttribute(ATTRIBUTE_BLOOD_PRESSURE_MODEL, bloodPressureModel);
+        model.addAttribute(ATTRIBUTE_RESULT, "");
+        return VIEW_CALCULATOR;
     }
 }
