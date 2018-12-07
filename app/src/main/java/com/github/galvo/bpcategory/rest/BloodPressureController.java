@@ -11,20 +11,22 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class BloodPressureController {
 
-    @Autowired
     private BloodPressureCategoryCalculator bloodPressureCalculator;
 
-    private BloodPressureModel bloodPressureModel = new BloodPressureModel();
+    @Autowired
+    public void setBloodPressureCategoryCalculator(BloodPressureCategoryCalculator bloodPressureCalculator) {
+        this.bloodPressureCalculator = bloodPressureCalculator;
+    }
 
-    @RequestMapping("/calculator")
+    @RequestMapping(value = "/calculator", method = RequestMethod.GET)
     public String getCalculatorPage(Model model){
-        model.addAttribute("bloodPressureModel", bloodPressureModel);
+        model.addAttribute("bloodPressureModel", new BloodPressureModel());
         model.addAttribute("result", "");
         return "calculator";
     }
 
     @RequestMapping(value="/calculator", params="submit", method = RequestMethod.POST)
-    public String add(@ModelAttribute("bloodPressureModel") BloodPressureModel bloodPressureModel, Model model) {
+    public String getCategory(@ModelAttribute("bloodPressureModel") BloodPressureModel bloodPressureModel, Model model) {
         try {
             BloodPressureCategory category = bloodPressureCalculator.getCategory(
                     bloodPressureModel.getSystolic(), bloodPressureModel.getDiastolic());
@@ -36,7 +38,7 @@ public class BloodPressureController {
     }
 
     @RequestMapping(value="/calculator", params="reset", method = RequestMethod.POST)
-    public String clearSimple(@ModelAttribute("bloodPressureModel") BloodPressureModel bloodPressureModel, Model model) {
+    public String clear(@ModelAttribute("bloodPressureModel") BloodPressureModel bloodPressureModel, Model model) {
         bloodPressureModel.setDiastolic(0);
         bloodPressureModel.setSystolic(0);
         model.addAttribute("bloodPressureModel", bloodPressureModel);
