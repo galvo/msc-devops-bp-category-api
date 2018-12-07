@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class BloodPressureController {
 
     private BloodPressureCategoryCalculator bloodPressureCalculator;
-    private final String ATTRIBUTE_RESULT = "result";
-    private final String ATTRIBUTE_BLOOD_PRESSURE_MODEL = "bloodPressureModel";
-    private final String VIEW_CALCULATOR = "calculator";
-    private final String ENDPOINT_CALCULATOR = "/calculator";
+    private static final String ATTRIBUTE_RESULT = "result";
+    private static final String ATTRIBUTE_BLOOD_PRESSURE_MODEL = "bloodPressureModel";
+    private static final String VIEW_CALCULATOR = "calculator";
+    private static final String ENDPOINT_CALCULATOR = "/calculator";
 
     @Autowired
     public void setBloodPressureCategoryCalculator(BloodPressureCategoryCalculator bloodPressureCalculator) {
