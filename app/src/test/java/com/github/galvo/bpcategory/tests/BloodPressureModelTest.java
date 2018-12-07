@@ -1,14 +1,11 @@
 package com.github.galvo.bpcategory.tests;
 
-import com.github.galvo.bpcategory.BloodPressureCategory;
 import com.github.galvo.bpcategory.BloodPressureModel;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 public class BloodPressureModelTest {
 
     @Test
