@@ -1,10 +1,12 @@
 package com.github.galvo.bpcategory.integration.tests;
 
+import com.github.galvo.bpcategory.BloodPressureCategory;
 import com.github.galvo.bpcategory.BloodPressureCategoryCalculator;
 import com.github.galvo.bpcategory.BloodPressureModel;
 import com.github.galvo.bpcategory.rest.BloodPressureController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,13 +29,10 @@ public class BloodPressureControllerIT {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
-    @MockBean
-    private BloodPressureCategoryCalculator bloodPressureCategoryCalculatorMock;
 
     @Test
     public void getCalculatorPage() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        assertThat(this.bloodPressureCategoryCalculatorMock).isNotNull();
         mockMvc.perform(MockMvcRequestBuilders.get("/calculator"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
@@ -42,13 +41,13 @@ public class BloodPressureControllerIT {
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("systolic", is(0))))
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("diastolic", is(0))))
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("operation", nullValue())))
+                .andExpect(model().attribute("result", equalTo("")))
                 .andDo(print());
     }
 
     @Test
     public void getCategory() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        assertThat(this.bloodPressureCategoryCalculatorMock).isNotNull();
 
         BloodPressureModel bloodPressureModel = new BloodPressureModel();
         bloodPressureModel.setSystolic(85);
@@ -66,13 +65,39 @@ public class BloodPressureControllerIT {
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("systolic", is(85))))
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("diastolic", is(55))))
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("operation", nullValue())))
+                .andExpect(model().attribute("result", equalTo(BloodPressureCategory.LOW.name())))
+                .andDo(print());
+    }
+
+    @Test
+    public void getOutOfRangeErrorForCategory() throws Exception {
+        int systolic = 110;
+        int diastolic = 55;
+        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
+        BloodPressureModel bloodPressureModel = new BloodPressureModel();
+        bloodPressureModel.setSystolic(systolic);
+        bloodPressureModel.setDiastolic(diastolic);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/calculator")
+                .param("systolic", String.valueOf(systolic))
+                .param("diastolic", String.valueOf(diastolic))
+                .param("submit", "Submit")
+                .sessionAttr("bloodPressureModel", bloodPressureModel))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/html;charset=UTF-8"))
+                .andExpect(view().name("calculator"))
+                .andExpect(MockMvcResultMatchers.view().name("calculator"))
+                .andExpect(model().attribute("bloodPressureModel", hasProperty("systolic", is(systolic))))
+                .andExpect(model().attribute("bloodPressureModel", hasProperty("diastolic", is(diastolic))))
+                .andExpect(model().attribute("bloodPressureModel", hasProperty("operation", nullValue())))
+                .andExpect(model().attribute("result", equalTo("Out of range")))
                 .andDo(print());
     }
 
     @Test
     public void clearSimple() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        assertThat(this.bloodPressureCategoryCalculatorMock).isNotNull();
         mockMvc.perform(MockMvcRequestBuilders.post("/calculator")
                 .param("reset", "Reset")
                 .sessionAttr("bloodPressureModel", new BloodPressureModel()))
@@ -83,6 +108,7 @@ public class BloodPressureControllerIT {
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("systolic", is(0))))
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("diastolic", is(0))))
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("operation", nullValue())))
+                .andExpect(model().attribute("result", equalTo("")))
                 .andDo(print());
     }
 }

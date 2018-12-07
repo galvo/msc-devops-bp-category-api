@@ -11,16 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class BloodPressureController {
 
-    private BloodPressureCategoryCalculator bloodPressureCalculator;
+    private BloodPressureCategoryCalculator bloodPressureCalculator = new BloodPressureCategoryCalculator();
     private static final String ATTRIBUTE_RESULT = "result";
     private static final String ATTRIBUTE_BLOOD_PRESSURE_MODEL = "bloodPressureModel";
     private static final String VIEW_CALCULATOR = "calculator";
     private static final String ENDPOINT_CALCULATOR = "/calculator";
-
-    @Autowired
-    public void setBloodPressureCategoryCalculator(BloodPressureCategoryCalculator bloodPressureCalculator) {
-        this.bloodPressureCalculator = bloodPressureCalculator;
-    }
 
     @GetMapping(value = ENDPOINT_CALCULATOR)
     public String getCalculatorPage(Model model){
