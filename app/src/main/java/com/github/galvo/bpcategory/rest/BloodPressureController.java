@@ -3,7 +3,6 @@ package com.github.galvo.bpcategory.rest;
 import com.github.galvo.bpcategory.BloodPressureCategoryCalculator;
 import com.github.galvo.bpcategory.BloodPressureCategory;
 import com.github.galvo.bpcategory.BloodPressureModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

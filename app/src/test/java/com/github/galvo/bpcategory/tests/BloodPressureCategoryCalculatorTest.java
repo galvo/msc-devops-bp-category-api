@@ -2,7 +2,6 @@ package com.github.galvo.bpcategory.tests;
 
 import com.github.galvo.bpcategory.BloodPressureCategoryCalculator;
 import com.github.galvo.bpcategory.BloodPressureCategory;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
