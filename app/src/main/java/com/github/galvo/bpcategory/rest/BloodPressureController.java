@@ -13,6 +13,7 @@ public class BloodPressureController {
     private BloodPressureCategoryCalculator bloodPressureCalculator = new BloodPressureCategoryCalculator();
     private static final String ATTRIBUTE_RESULT = "result";
     private static final String ATTRIBUTE_BLOOD_PRESSURE_MODEL = "bloodPressureModel";
+    private static final String ATTRIBUTE_SUMMARY = "summary";
     private static final String VIEW_CALCULATOR = "calculator";
     private static final String ENDPOINT_CALCULATOR = "/calculator";
 
@@ -20,6 +21,7 @@ public class BloodPressureController {
     public String getCalculatorPage(Model model){
         model.addAttribute(ATTRIBUTE_BLOOD_PRESSURE_MODEL, new BloodPressureModel());
         model.addAttribute(ATTRIBUTE_RESULT, "");
+        model.addAttribute(ATTRIBUTE_SUMMARY, "");
         return VIEW_CALCULATOR;
     }
 
@@ -29,8 +31,10 @@ public class BloodPressureController {
             BloodPressureCategory category = bloodPressureCalculator.getCategory(
                     bloodPressureModel.getSystolic(), bloodPressureModel.getDiastolic());
             model.addAttribute(ATTRIBUTE_RESULT, category.getDisplayName());
+            model.addAttribute(ATTRIBUTE_SUMMARY, category.getSummary());
         } catch (Exception ex) {
             model.addAttribute(ATTRIBUTE_RESULT, ex.getMessage());
+            model.addAttribute(ATTRIBUTE_SUMMARY, "");
         }
         return VIEW_CALCULATOR;
     }
@@ -41,6 +45,7 @@ public class BloodPressureController {
         bloodPressureModel.setSystolic(0);
         model.addAttribute(ATTRIBUTE_BLOOD_PRESSURE_MODEL, bloodPressureModel);
         model.addAttribute(ATTRIBUTE_RESULT, "");
+        model.addAttribute(ATTRIBUTE_SUMMARY, "");
         return VIEW_CALCULATOR;
     }
 }

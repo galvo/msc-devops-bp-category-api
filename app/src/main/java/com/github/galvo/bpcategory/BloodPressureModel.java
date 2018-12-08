@@ -5,6 +5,7 @@ public class BloodPressureModel {
     private String operation;
     private int systolic;
     private int diastolic;
+    private String summary;
 
     public BloodPressureModel() {
 
@@ -41,5 +42,13 @@ public class BloodPressureModel {
 
     public void setOperation(String operation) {
         this.operation = operation;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }
