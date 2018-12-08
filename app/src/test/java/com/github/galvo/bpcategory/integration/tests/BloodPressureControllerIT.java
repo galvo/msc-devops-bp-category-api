@@ -64,7 +64,7 @@ public class BloodPressureControllerIT {
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("systolic", is(85))))
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("diastolic", is(55))))
                 .andExpect(model().attribute("bloodPressureModel", hasProperty("operation", nullValue())))
-                .andExpect(model().attribute("result", equalTo(BloodPressureCategory.LOW.name())))
+                .andExpect(model().attribute("result", equalTo(BloodPressureCategory.LOW.getDisplayName())))
                 .andDo(print());
     }
 

@@ -28,7 +28,7 @@ public class BloodPressureController {
         try {
             BloodPressureCategory category = bloodPressureCalculator.getCategory(
                     bloodPressureModel.getSystolic(), bloodPressureModel.getDiastolic());
-            model.addAttribute(ATTRIBUTE_RESULT, category.name());
+            model.addAttribute(ATTRIBUTE_RESULT, category.getDisplayName());
         } catch (Exception ex) {
             model.addAttribute(ATTRIBUTE_RESULT, ex.getMessage());
         }
