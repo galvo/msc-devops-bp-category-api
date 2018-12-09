@@ -27,8 +27,8 @@
             <input type="submit" class="button" name="submit" value="Submit"/>
             <input type="submit" class="button" name="reset" value="Reset"/>
         </p>
-        <h4><p th:text="${result}"/></h4>
-        <p th:text="${summary}"/>
+        <h4><p id="resultText" th:text="${result}"/></h4>
+        <p id="summary" th:text="${summary}"/>
     </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>

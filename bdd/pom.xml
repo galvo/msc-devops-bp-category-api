@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>bp-category-api-bdd</name>
-    <description>Cucumber BDD Tests for BP Category REST API</description>
+    <description>Cucumber BDD Web Browser Tests for Blood Pressure Category</description>
 
     <properties>
         <cucumber.version>4.0.1</cucumber.version>
@@ -33,9 +33,10 @@
             <version>${cucumber.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>3.0.7</version>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
@@ -46,11 +47,6 @@
             <groupId>org.skyscreamer</groupId>
             <artifactId>jsonassert</artifactId>
             <version>1.5.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.7</version>
         </dependency>
         <!-- Logging -->
         <dependency>
@@ -85,6 +81,7 @@
                     <projectName>${project.artifactId}-tests</projectName>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                     <parallelTesting>false</parallelTesting>
+                    <classificationDirectory>${project.basedir}/src/test/resources/classifications</classificationDirectory>
                     <jsonFiles>
                         <!-- supports wildcard or name pattern -->
                         <param>**/*.json</param>

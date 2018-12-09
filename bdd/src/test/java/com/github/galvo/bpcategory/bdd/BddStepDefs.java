@@ -1,6 +1,5 @@
 package com.github.galvo.bpcategory.bdd;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -8,23 +7,23 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.LogDetail;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BddStepDefs {
 
     private Logger logger = LoggerFactory.getLogger(BddStepDefs.class);
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
+    private WebDriver driver;
     private static String HOST;
-    private static String PORT;
-    private static String BASEPATH;
+    private static String BROWSER;
+    private static String WEBDRIVER_PATH;
 
     static {
         System.setProperty("logging.level.root", "DEBUG");
@@ -32,39 +31,52 @@ public class BddStepDefs {
 
     @Before
     public void before(Scenario scenario) {
+        driver = new ChromeDriver();
         HOST = System.getProperty("host");
-        PORT = System.getProperty("port");
-        BASEPATH = System.getProperty("basePath");
-        if (HOST == null || PORT == null || BASEPATH == null) {
+        BROWSER = System.getProperty("browser");
+        WEBDRIVER_PATH = System.getProperty("webdriverPath");
+        if (HOST == null || BROWSER == null || WEBDRIVER_PATH == null) {
             throw new RuntimeException(
-                    "Either 'host', 'port', 'basePath' were not defined as command line arguments "
-                            + "e.g. \n'mvn verify -Dhost=127.0.0.1 -Dport=80 -DbasePath=/blah'");
+                    "Either 'host', 'browser', 'webdriverPath' were not defined as command line arguments "
+                            + "e.g. \n'mvn verify -Dhost=http://localhost:8085/calculator -Dbrowser=chrome -DwebdriverPath=/usr/local/bin/chromedriver'");
         }
-
-        RestAssured.reset();
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL);
-        RestAssured.baseURI = "http://" + HOST + ":" + PORT + BASEPATH;
-        logger.debug("Before Scenario() ***  Start   *** [{}] HttpTarget:{}", scenario.getName(), RestAssured.baseURI);
-
-        System.setProperty("logging.level.root", "DEBUG");
-
+        String driverName = null;
+        if ("chrome".equals(BROWSER.toLowerCase())) {
+            driverName = "webdriver.chrome.driver";
+        }
+        logger.debug("Before Scenario() browser:{} driver:{}, path:{}", BROWSER, driverName, WEBDRIVER_PATH);
+        System.setProperty(driverName, WEBDRIVER_PATH);
         logger.debug("Before Scenario() *** Finished ***");
     }
     
     @After
     public void after(Scenario scenario) {
         logger.debug("After Scenario() ***  Start   *** [{}]", scenario.getName());
-
+        driver.quit();
         logger.debug("After Scenario() *** Finished ***");
     }
 
-    @Given("service is healthy")
-    public void service_is_healthy()  {
-
+    @Given("browser is open on homepage")
+    public void browser_is_open_on_homepage()  {
+        driver.get(HOST);
     }
 
-    @And("a (.+) request to (.+) will respond with status (\\d+) and payload:$")
-    public void mock_api(String httpVerb, String url, Integer responseStatus, String responseBody)  {
+    @And("the (.+) value is (\\d+)")
+    public void the_field_value_is_x(String field, Integer value)  {
+        WebElement element = driver.findElement(By.name(field));
+        element.clear();
+        element.sendKeys(value.toString());
+    }
 
+    @When("i click submit")
+    public void i_click_submit()  {
+        driver.findElement(By.name("submit")).click();
+    }
+
+
+    @Then("it should display (.+).")
+    public void service_is_healthy(String displayText)  {
+        WebElement resultElement = driver.findElement(By.id("resultText"));
+        assertThat(resultElement.getText()).isEqualTo(displayText);
     }
 }
