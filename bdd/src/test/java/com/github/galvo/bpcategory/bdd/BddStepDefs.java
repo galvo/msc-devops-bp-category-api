@@ -34,7 +34,9 @@ public class BddStepDefs {
         driver = new ChromeDriver();
         HOST = System.getProperty("host");
         BROWSER = System.getProperty("browser");
-        WEBDRIVER_PATH = System.getProperty("webdriverPath");
+        WEBDRIVER_PATH = System.getenv("webdriverPath");
+        logger.debug("Before Scenario() prop:{} env:{}", System.getProperty("webdriverPath"), System.getenv("webdriverPath"));
+
         if (HOST == null || BROWSER == null || WEBDRIVER_PATH == null) {
             throw new RuntimeException(
                     "Either 'host', 'browser', 'webdriverPath' were not defined as command line arguments "
