@@ -34,7 +34,7 @@ public class BddStepDefs {
         HOST = System.getProperty("host");
         BROWSER = System.getProperty("browser");
         WEBDRIVER_PATH = System.getProperty("webdriverPath");
-        logger.debug("Before Scenario() path:{}", WEBDRIVER_PATH);
+        logger.debug("Before Scenario() path:{}", WEBDRIVER_PATH, System.getenv(WEBDRIVER_PATH));
 
         if (HOST == null || BROWSER == null || WEBDRIVER_PATH == null) {
             throw new RuntimeException(
