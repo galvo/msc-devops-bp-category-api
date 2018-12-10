@@ -31,11 +31,10 @@ public class BddStepDefs {
 
     @Before
     public void before(Scenario scenario) {
-        driver = new ChromeDriver();
         HOST = System.getProperty("host");
         BROWSER = System.getProperty("browser");
-        WEBDRIVER_PATH = System.getenv("webdriverPath");
-        logger.debug("Before Scenario() prop:{} env:{}", System.getProperty("webdriverPath"), System.getenv("webdriverPath"));
+        WEBDRIVER_PATH = System.getProperty("webdriverPath");
+        logger.debug("Before Scenario() path:{}", WEBDRIVER_PATH);
 
         if (HOST == null || BROWSER == null || WEBDRIVER_PATH == null) {
             throw new RuntimeException(
@@ -48,6 +47,7 @@ public class BddStepDefs {
         }
         logger.debug("Before Scenario() browser:{} driver:{}, path:{}", BROWSER, driverName, WEBDRIVER_PATH);
         System.setProperty(driverName, WEBDRIVER_PATH);
+        driver = new ChromeDriver();
         logger.debug("Before Scenario() *** Finished ***");
     }
     
