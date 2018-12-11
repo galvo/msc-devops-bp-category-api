@@ -1,37 +1,25 @@
 Feature: Get Blood Pressure Category
   'Scenarios for getting valid and invalid Blood Pressure Categories.
 
-  Scenario: Get Valid Low Blood Pressure Category
+  Scenario Outline: Get <display> from systolic value of <systolic> and diastolic value of <diastolic>
     Given browser is open on homepage
-    And the systolic value is 75
-    And the diastolic value is 45
+    And the systolic value is <systolic>
+    And the diastolic value is <diastolic>
     When i click submit
-    Then it should display Low Blood Pressure.
+    Then it should display <display>.
 
-  Scenario: Get Valid Normal Blood Pressure Category
-    Given browser is open on homepage
-    And the systolic value is 100
-    And the diastolic value is 70
-    When i click submit
-    Then it should display Normal Blood Pressure.
+    @qa @dev @prod
+    Examples:
+      | systolic | diastolic | display                 |
+      | 75       | 45        | Low Blood Pressure      |
+      | 100      | 70        | Normal Blood Pressure   |
+      | 130      | 85        | Pre-High Blood Pressure |
+      | 160      | 95        | High Blood Pressure     |
+      | 150      | 70        | Out of range            |
 
-  Scenario: Get Valid Pre-High Blood Pressure Category
-    Given browser is open on homepage
-    And the systolic value is 130
-    And the diastolic value is 85
-    When i click submit
-    Then it should display Pre-High Blood Pressure.
-
-  Scenario: Get Valid High Blood Pressure Category
-    Given browser is open on homepage
-    And the systolic value is 160
-    And the diastolic value is 95
-    When i click submit
-    Then it should display High Blood Pressure.
-
-  Scenario: Get Out of range error for invalid systolic & diastolic values
-    Given browser is open on homepage
-    And the systolic value is 150
-    And the diastolic value is 70
-    When i click submit
-    Then it should display Out of range.
+    @qa
+    Examples:
+      | systolic | diastolic | display                             |
+      | 65       | 35        | Invalid Systolic & Diastolic Values |
+      | 65       | 55        | Invalid Systolic Value              |
+      | 130      | 110       | Invalid Diastolic Value             |
