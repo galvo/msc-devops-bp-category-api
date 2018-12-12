@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="aiAppender"
+              class="com.microsoft.applicationinsights.logback.ApplicationInsightsAppender">
+    </appender>
+    <root level="trace">
+        <appender-ref ref="aiAppender" />
+    </root>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%-8.8(%thread)] %-6level %-30.30logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.github.galvo.bpcategory.bdd" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <root level="trace">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="aiAppender" />
+    </root>
+</configuration>

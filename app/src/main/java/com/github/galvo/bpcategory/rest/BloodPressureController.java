@@ -3,12 +3,16 @@ package com.github.galvo.bpcategory.rest;
 import com.github.galvo.bpcategory.BloodPressureCategoryCalculator;
 import com.github.galvo.bpcategory.BloodPressureCategory;
 import com.github.galvo.bpcategory.BloodPressureModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class BloodPressureController {
+
+    final static Logger logger = LoggerFactory.getLogger(BloodPressureCategoryCalculator.class);
 
     private BloodPressureCategoryCalculator bloodPressureCalculator = new BloodPressureCategoryCalculator();
     private static final String ATTRIBUTE_RESULT = "result";
@@ -32,6 +36,8 @@ public class BloodPressureController {
                     bloodPressureModel.getSystolic(), bloodPressureModel.getDiastolic());
             model.addAttribute(ATTRIBUTE_RESULT, category.getDisplayName());
             model.addAttribute(ATTRIBUTE_SUMMARY, category.getSummary());
+            logger.info("<- Systolic:{} Diastolic:{} returned {}",  bloodPressureModel.getSystolic(),
+                    bloodPressureModel.getDiastolic(), category.getDisplayName());
         } catch (Exception ex) {
             model.addAttribute(ATTRIBUTE_RESULT, ex.getMessage());
             model.addAttribute(ATTRIBUTE_SUMMARY, "");
