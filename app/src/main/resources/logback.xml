@@ -10,7 +10,7 @@
     <logger name="com.github.galvo.bpcategory.bdd" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
-    <root level="TRACE">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="aiAppender" />
     </root>
